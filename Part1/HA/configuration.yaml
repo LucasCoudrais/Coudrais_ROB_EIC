@@ -1,0 +1,5 @@
+mqtt:
+  - sensor:
+      name: "Temperature"
+      state_topic: "/I102/CoudraisGirardin/temperature"
+      suggested_display_precision: 1

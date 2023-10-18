@@ -1,0 +1,112 @@
+esphome:
+  name: motor
+
+esp32:
+  board: ttgo-lora32-v21
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: ""
+
+ota:
+  password: ""
+
+wifi:
+  ssid: "CPE-Domotique"
+  password: "astro4student"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Temperature Fallback Hotspot"
+    password: "AabCFRudLG4o"
+
+
+
+# Example configuration entry
+servo:
+  - id: my_servo
+    output: pwm_output
+
+switch: 
+  - platform: gpio
+    name: "Arduino"
+    pin: 33
+    id: switch_arduino
+    on_turn_on: 
+      - servo.write: 
+          id: my_servo
+          level: -50%
+      # - switch.turn_off: switch_arduino
+    on_turn_off: 
+      - servo.write: 
+          id: my_servo
+          level: 50%
+      - switch.turn_off: switch_arduino
+
+number:
+  - platform: template
+    name: Servo Control
+    min_value: -100
+    initial_value: 0
+    max_value: 100
+    step: 1
+    optimistic: true
+    set_action:
+      then:
+        - servo.write:
+            id: my_servo
+            level: !lambda 'return x / 100.0;'
+
+
+# # Example configuration entry
+# light:
+#   - platform: binary
+#     name: "Desk Lamp"
+#     output: light_output
+
+# # Example configuration entry
+# light:
+#   - platform: neopixelbus
+#     variant: WS2812
+#     pin: 32
+#     num_leds: 2
+#     name: "NeoPixel Light"
+
+light:
+  - platform: rgb
+    name: "Led RGB"
+    red: output_component1
+    green: output_component2
+    blue: output_component3
+
+
+
+  # Repeat for green and blue output
+
+# Example output platform
+# On ESP32, use ledc output
+output:
+  # - platform : gpio
+  #   id: light_output
+  #   pin: GPIO32
+  - platform: ledc
+    id: output_component1
+    pin: 32
+  - platform: ledc
+    id: output_component2
+    pin: 25
+  - platform: ledc
+    id: output_component3
+    pin: 26
+  - id: pwm_output
+    platform: ledc
+    pin: 33
+    frequency: 50 Hz
+
+captive_portal:
+    

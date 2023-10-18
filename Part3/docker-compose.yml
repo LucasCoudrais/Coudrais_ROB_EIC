@@ -1,0 +1,17 @@
+version: '3.7'
+
+# rebuild image pour $HOME
+
+services:
+
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto_broker
+    restart: always
+    ports:
+      - "1884:1884"
+      - "9001:9001"
+    volumes:
+      - /tmp/docker_volumes_1/mosquitto/config:/mosquitto/config
+      - /tmp/docker_volumes_1/mosquitto/data:/mosquitto/data
+      - /tmp/docker_volumes_1/mosquitto/log:/mosquitto/log  

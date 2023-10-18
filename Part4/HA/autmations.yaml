@@ -1,0 +1,74 @@
+alias: close
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - sensor.data
+  - platform: state
+    entity_id:
+      - sensor.temp
+condition:
+  - condition: and
+    conditions:
+      - condition: numeric_state
+        entity_id: sensor.data
+        below: 75
+      - condition: numeric_state
+        entity_id: sensor.temp
+        below: 15
+action:
+  - type: turn_off
+    device_id: 198a6772e894a5cbddf2f785dce7b9fe
+    entity_id: a80551136f97f54ec90a2ca0510662fb
+    domain: switch
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.led_rgb
+  - service: light.turn_on
+    data:
+      rgb_color:
+        - 224
+        - 27
+        - 36
+    target:
+      entity_id: light.led_rgb
+mode: single
+
+alias: open
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - sensor.data
+  - platform: state
+    entity_id:
+      - sensor.temp
+condition:
+  - condition: and
+    conditions:
+      - condition: numeric_state
+        entity_id: sensor.data
+        above: 75
+      - condition: numeric_state
+        entity_id: sensor.temp
+        above: 15
+action:
+  - type: turn_on
+    device_id: 198a6772e894a5cbddf2f785dce7b9fe
+    entity_id: a80551136f97f54ec90a2ca0510662fb
+    domain: switch
+  - service: light.turn_off
+    data: {}
+    target:
+      entity_id: light.led_rgb
+  - service: light.turn_on
+    data:
+      rgb_color:
+        - 51
+        - 209
+        - 122
+    target:
+      entity_id: light.led_rgb
+mode: single
+

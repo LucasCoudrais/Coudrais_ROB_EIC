@@ -1,0 +1,62 @@
+esphome:
+  name: esp-temp
+
+esp32:
+  board: ttgo-lora32-v21
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: ""
+
+ota:
+  password: ""
+
+wifi:
+  ssid: "CPE-Domotique"
+  password: "astro4student"
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Temperature Fallback Hotspot"
+    password: "AabCFRudLG4o"
+
+# Example configuration entry
+sensor:
+  - platform: adc
+    pin: 36
+    name: volt
+    id: volt
+    update_interval: 1s
+
+  - platform: template
+    name: temperature
+    id: temperature
+    unit_of_measurement: '°C'
+    update_interval: 1s
+    lambda: |-
+      return id(volt).state*30;   
+
+  # - platform: homeassistant
+  #   id: temp_from_assistant
+  #   entity_id: sensor.temperature
+  #   unit_of_measurement: 'C'
+
+  # - platform: template
+  #   name: hot_or_cold
+  #   id: hot_or_cold
+  #   unit_of_measurement: ''
+  #   update_interval: 1s
+  #   lambda: |-
+  #     if(id(temp_from_assistant).state < 15){
+  #       return 0;
+  #     } else {
+  #       return 1;
+  #     }
+
+captive_portal:
+    

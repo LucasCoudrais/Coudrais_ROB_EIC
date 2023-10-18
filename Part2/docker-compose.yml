@@ -1,0 +1,27 @@
+version: '3.7'
+
+# rebuild image pour $HOME
+
+services:
+
+  homeassistant:
+    image: lscr.io/linuxserver/homeassistant
+    container_name: homeassistant
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Paris
+    volumes:
+      - /tmp/docker_volumes/homeAssistant/config:/config
+    restart: unless-stopped      
+
+  esphome:
+    container_name: esphome
+    image: ghcr.io/esphome/esphome
+    volumes:
+      - /tmp/docker_volumes/esphome/config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: always
+    privileged: true
+    network_mode: host
